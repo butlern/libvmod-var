@@ -1,0 +1,20 @@
+Source: libvmod-var
+Priority: extra
+Maintainer: webops <webops@newsweek.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, automake, libtool,
+ autoconf, libncurses-dev, xsltproc, groff-base, libpcre3-dev,
+ pkg-config, python-docutils, libedit-dev
+Standards-Version: 3.9.2
+Section: libs
+Homepage: https://github.com/butlern/libvmod-var
+Vcs-Git: git@github.com:butlern/libvmod-var.git
+Vcs-Browser: https://github.com/butlern/libvmod-var
+
+Package: libvmod-var
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, varnish (>= 3.0.2)
+Built-Using: varnish (= 3.0.2)
+Description: vmod provides cURL bindings for varnish
+  This vmod provides cURL bindings for Varnish so you can use Varnish
+  as an HTTP client and fetch headers and bodies from backends.

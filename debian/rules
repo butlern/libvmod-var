@@ -1,0 +1,53 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+# Internal variables
+prefix = /usr
+varnish_version = 3.*
+varnish_source = varnish-$(varnish_version)
+vmoddir = $(prefix)/lib/varnish/vmods
+
+%:
+	dh $@ 
+
+# Override to disable tests
+override_dh_auto_test:
+
+# Override to install varnish source, run autogen.sh and configure
+override_dh_auto_configure:
+	( apt-get source varnish && \
+        cd $(varnish_source) && \
+        ./configure && \
+        make && cd .. && \
+	./autogen.sh && \
+	VARNISHSRC=$(varnish_source) VMODDIR=$(vmoddir) ./configure --prefix=$(prefix) )
+
+# Override to remove autogen'd files
+override_dh_auto_clean:
+	# If Makefile exists, that means we have some cruft to clean up
+	$(if $(wildcard Makefile), $(MAKE) distclean)
+	rm -f man/*.[0-9] \
+	rm -f man/*.in \
+	rm -f Makefile.in \
+	rm -f aclocal.m4 \
+	rm -f compile \
+	rm -f config.* \
+	rm -f configure \
+	rm -f depcomp \
+	rm -f install-sh \
+	rm -f ltmain.sh \
+	rm -f m4/*.m4 \
+	rm -f missing \
+	rm -f src/Makefile.in \
+	rm -rf varnish* \
+	dh_auto_clean
+
+.PHONY: override_dh_auto_test override_dh_auto_configure override_dh_auto_clean
