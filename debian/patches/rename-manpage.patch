@@ -1,0 +1,16 @@
+Most upstream vmods create the same manpage with the same name, this patch renames it so multiple vmods won't conflict
+--- a/man/Makefile.am
++++ b/man/Makefile.am
+@@ -1,10 +1,10 @@
+ #
+ 
+-dist_man_MANS = vmod_example.3
++dist_man_MANS = vmod_var_example.3
+ MAINTAINERCLEANFILES = $(dist_man_MANS)
+ EXTRA_DIST = vmod_example.rst
+ 
+-vmod_example.3: vmod_example.rst
++vmod_var_example.3: vmod_example.rst
+ if HAVE_RST2MAN
+ 	${RST2MAN} vmod_example.rst $@
+ else

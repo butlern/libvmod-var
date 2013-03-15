@@ -10,10 +10,17 @@
 export DH_VERBOSE=1
 
 # Internal variables
-prefix = /usr
-varnish_version = 3.*
-varnish_source = varnish-$(varnish_version)
-vmoddir = $(prefix)/lib/varnish/vmods
+PREFIX := /usr
+VMODDIR := $(PREFIX)/lib/varnish/vmods
+# TODO: Provide explanation for following heuristics
+# 
+DISTRO := $(shell dpkg-parsechangelog|grep Distribution|awk '{print $$2}')
+VARNISH_APT_VERSION := $(shell apt-cache policy varnish |tail -2|head -1|awk '{print $$1}')
+UPSTREAM_VERSION := $(shell echo $(VARNISH_APT_VERSION) | cut -f 1 -d -)
+APT_SOURCE_URI := $(shell egrep '^deb.* $(DISTRO) .*universe' /etc/apt/sources.list|awk '{print $$2}'|sed 's/[/]\+$$//')
+DGET_URI := $(APT_SOURCE_URI)/pool/universe/v/varnish/varnish_$(VARNISH_APT_VERSION).dsc
+VARNISH_SOURCE := varnish-$(UPSTREAM_VERSION)
+#
 
 %:
 	dh $@ 
@@ -21,14 +28,17 @@ vmoddir = $(prefix)/lib/varnish/vmods
 # Override to disable tests
 override_dh_auto_test:
 
+# Override to disable installing man pages
+override_dh_installman:
+
 # Override to install varnish source, run autogen.sh and configure
 override_dh_auto_configure:
-	( apt-get source varnish && \
-        cd $(varnish_source) && \
+	( dget -x -u $(DGET_URI) && \
+        cd $(VARNISH_SOURCE) && \
         ./configure && \
         make && cd .. && \
 	./autogen.sh && \
-	VARNISHSRC=$(varnish_source) VMODDIR=$(vmoddir) ./configure --prefix=$(prefix) )
+	VARNISHSRC=$(VARNISH_SOURCE) VMODDIR=$(VMODDIR) ./configure --prefix=$(PREFIX) )
 
 # Override to remove autogen'd files
 override_dh_auto_clean:
@@ -50,4 +60,4 @@ override_dh_auto_clean:
 	rm -rf varnish* \
 	dh_auto_clean
 
-.PHONY: override_dh_auto_test override_dh_auto_configure override_dh_auto_clean
+.PHONY: override_dh_auto_test override_dh_installman override_dh_auto_configure override_dh_auto_clean

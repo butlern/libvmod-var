@@ -1,5 +1,5 @@
-libvmod-var (0.0.1-webops0~precise0) precise; urgency=low
+libvmod-var (1.0.0-webops0) precise; urgency=low
 
   * Initial debianized release
 
- -- webops <webops@newsweek.com>  Wed, 11 Mar 2013 21:53:46 +0000
+ -- webops <webops@newsweek.com>  Fri, 15 Mar 2013 03:28:38 +0000

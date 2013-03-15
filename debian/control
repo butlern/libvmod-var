@@ -1,9 +1,9 @@
 Source: libvmod-var
 Priority: extra
 Maintainer: webops <webops@newsweek.com>
-Build-Depends: debhelper (>= 8.0.0), autotools-dev, automake, libtool,
- autoconf, libncurses-dev, xsltproc, groff-base, libpcre3-dev,
- pkg-config, python-docutils, libedit-dev
+Build-Depends: debhelper (>= 8.0.0), devscripts, curl, autotools-dev,
+ automake, libtool, autoconf, libncurses-dev, xsltproc, groff-base,
+ libpcre3-dev, pkg-config, python-docutils, libedit-dev, libcurl4-gnutls-dev
 Standards-Version: 3.9.2
 Section: libs
 Homepage: https://github.com/butlern/libvmod-var
