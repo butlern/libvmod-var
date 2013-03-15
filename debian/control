@@ -15,6 +15,6 @@ Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, varnish (>= 3.0.2)
 Built-Using: varnish (= 3.0.2)
-Description: vmod provides cURL bindings for varnish
-  This vmod provides cURL bindings for Varnish so you can use Varnish
-  as an HTTP client and fetch headers and bodies from backends.
+Description: vmod implements basic variables in VCL.
+  This vmod implements basic variable in VCL. Well. It's more of an
+  association list with support for strings, ints and reals.

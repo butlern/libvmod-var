@@ -1,3 +1,9 @@
+libvmod-var (1.0.0-webops2) precise; urgency=low
+
+  * Update description in control file
+
+ -- webops <webops@newsweek.com>  Fri, 15 Mar 2013 17:00:18 +0000
+
 libvmod-var (1.0.0-webops1) precise; urgency=low
 
   * Limit method for retrieving apt uri to return 1 record
