@@ -12,15 +12,35 @@ export DH_VERBOSE=1
 # Internal variables
 PREFIX := /usr
 VMODDIR := $(PREFIX)/lib/varnish/vmods
-# TODO: Provide explanation for following heuristics
+
+# The following is definitely a big hack.
 # 
+# Problem: This package requires the varnish source to compile against.
+# Launchpad doesn't provide deb-src uris in the sources.list file in the
+# builder's chrooted environment so we can't run 'apt-get source varnish'.
+# We want to use Launchpad to distribute our packages instead of managing
+# our own apt repository.
+#
+# Possible Solution: Don't compile against the varnish source package! The
+# varnish debian package *should* provide *-dev package(s) which provide all
+# necessary header files and any other dev libraries. Unfortunately, this is
+# not the case. And pushing those changes to the Debian Varnish Maintainers
+# is the best solution but not practical from a time perspective.
+#
+# We are left with the solution below, which attempts to not hardcode values
+# as much as possible as it figures out the varnish version and distribution.
+# Although a lot of the legwork is done with regexes and positional assumptions
+# so this could break.
+# 
+# You have been warned :)
+# 
+
 DISTRO := $(shell dpkg-parsechangelog|grep Distribution|awk '{print $$2}')
 VARNISH_APT_VERSION := $(shell apt-cache policy varnish |tail -2|head -1|awk '{print $$1}')
 UPSTREAM_VERSION := $(shell echo $(VARNISH_APT_VERSION) | cut -f 1 -d -)
-APT_SOURCE_URI := $(shell egrep '^deb.* $(DISTRO) .*universe' /etc/apt/sources.list|awk '{print $$2}'|sed 's/[/]\+$$//')
+APT_SOURCE_URI := $(shell egrep '^deb.* $(DISTRO) .*universe' /etc/apt/sources.list|awk '{print $$2}'|tail -1|sed 's/[/]\+$$//')
 DGET_URI := $(APT_SOURCE_URI)/pool/universe/v/varnish/varnish_$(VARNISH_APT_VERSION).dsc
 VARNISH_SOURCE := varnish-$(UPSTREAM_VERSION)
-#
 
 %:
 	dh $@ 
