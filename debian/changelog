@@ -1,3 +1,10 @@
+libvmod-var (1.0.0-webops1) precise; urgency=low
+
+  * Limit method for retrieving apt uri to return 1 record
+  * Add comments in rules file
+
+ -- webops <webops@newsweek.com>  Fri, 15 Mar 2013 15:28:35 +0000
+
 libvmod-var (1.0.0-webops0) precise; urgency=low
 
   * Initial debianized release
